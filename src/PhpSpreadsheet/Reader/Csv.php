@@ -279,7 +279,12 @@ class Csv extends BaseReader
             $this->inputEncoding = self::guessEncoding($filename, $this->fallbackEncoding);
         }
         $this->openFile($filename);
-        if ($this->inputEncoding !== 'UTF-8') {
+        $exceptEncodingArr = [
+            'UTF-8',
+            'Shift-JIS',
+            'SJIS'
+        ];
+        if (!in_array($this->inputEncoding, $exceptEncodingArr)) {
             fclose($this->fileHandle);
             $entireFile = file_get_contents($filename);
             $fileHandle = fopen('php://memory', 'r+b');
